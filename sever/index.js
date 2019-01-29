@@ -15,6 +15,18 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+app.use((req, res, next)=>{
+    const badWords = ['fool']
+    if(req.body.message){
+        for(let i=0;i<badWords.length;i++){
+            let regex = new RegExp(badWords[i], 'g');
+            req.body.message = req.body.message.replace(regex, '****');
+        }
+        next()
+    }else{
+        next()
+    }
+})
 
 //endpoints
 app.get(`/api/messages`, mc.getAllMessages)
